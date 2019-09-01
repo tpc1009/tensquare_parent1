@@ -57,14 +57,15 @@ public class LabelService {
         return labelDao.findAll(new Specification<Label>() {
             @Override
             public Predicate toPredicate(Root<Label> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
-
+                //封装集合
                 ArrayList<Predicate> list = new ArrayList<>();
                 if (label.getLabelname() !=null && "".equals(label.getLabelname())){
                     Predicate predicate = cb.like(root.get("labelname").as(String.class),"%"+label.getLabelname()+"%");
                     list.add(predicate);
                 }
-
+                //创建需要返回的数组结果集
                 Predicate[] predicates = new Predicate[list.size()];
+                //list集合转为数组
                 list.toArray(predicates);
 
                 return cb.and(predicates);
