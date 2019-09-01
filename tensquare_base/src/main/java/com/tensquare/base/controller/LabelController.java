@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
+@CrossOrigin  //处理跨域问题
 @RequestMapping("/label")
 public class LabelController {
 
