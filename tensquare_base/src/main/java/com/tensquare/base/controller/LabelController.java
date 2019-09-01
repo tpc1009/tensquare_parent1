@@ -1,6 +1,7 @@
 package com.tensquare.base.controller;
 
 
+import com.tensquare.base.pojo.Label;
 import com.tensquare.base.service.LabelService;
 import entity.Result;
 import entity.StatusCode;
@@ -54,6 +55,17 @@ public class LabelController {
     @RequestMapping(value = "/{id}",method = RequestMethod.DELETE)
     public Result delete(@PathVariable("id")String id){
         return new Result(true,StatusCode.OK,"success");
+    }
+
+
+    /**
+     * 搜索
+     */
+
+    @RequestMapping(value = "/search",method = RequestMethod.POST)
+    public Result search(@RequestBody Label label){
+        List<Label> list = labelService.search(label);
+        return new Result(true,StatusCode.OK,"查询成功!",list);
     }
 
 }
