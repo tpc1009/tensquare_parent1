@@ -60,7 +60,11 @@ public class LabelService {
                 //封装集合
                 ArrayList<Predicate> list = new ArrayList<>();
                 if (label.getLabelname() !=null && "".equals(label.getLabelname())){
-                    Predicate predicate = cb.like(root.get("labelname").as(String.class),"%"+label.getLabelname()+"%");
+                    Predicate predicate = cb.like(root.get("labelname").as(String.class),"%"+label.getLabelname()+"%");//like语句
+                    list.add(predicate);
+                }
+                if (label.getLabelname() !=null && "".equals(label.getLabelname())){
+                    Predicate predicate = cb.equal(root.get("state").as(String.class),label.getState());//=赋值语句
                     list.add(predicate);
                 }
                 //创建需要返回的数组结果集
