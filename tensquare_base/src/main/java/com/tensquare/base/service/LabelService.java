@@ -2,10 +2,12 @@ package com.tensquare.base.service;
 
 import com.tensquare.base.dao.LabelDao;
 import com.tensquare.base.pojo.Label;
-import entity.Result;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+import util.IdWorker;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
@@ -16,6 +18,9 @@ import java.util.List;
 
 @Service
 public class LabelService {
+
+    @Autowired
+    private IdWorker idWorker;
 
     @Autowired
     private LabelDao labelDao;
@@ -38,6 +43,7 @@ public class LabelService {
      * 修改标签
      */
     public void upateById(Label id){
+        id.setId(idWorker.nextId()+"");
         labelDao.save(id);
     }
     /**
@@ -63,7 +69,7 @@ public class LabelService {
                     Predicate predicate = cb.like(root.get("labelname").as(String.class),"%"+label.getLabelname()+"%");//like语句
                     list.add(predicate);
                 }
-                if (label.getLabelname() !=null && "".equals(label.getLabelname())){
+                if (label.getState() !=null && "".equals(label.getState())){
                     Predicate predicate = cb.equal(root.get("state").as(String.class),label.getState());//=赋值语句
                     list.add(predicate);
                 }
@@ -77,5 +83,26 @@ public class LabelService {
         });
       //  return null;
     }
+    //分页搜索
+    public Page<Label> pageQuery(Label label, int page, int size) {
+        PageRequest request = PageRequest.of(page - 1, size);
+        return labelDao.findAll(new Specification<Label>() {
+            @Override
+            public Predicate toPredicate(Root<Label> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
+                ArrayList<Predicate> list = new ArrayList<>();
 
+               if(label.getLabelname()!=null && "".equals(label.getLabelname())){
+                   Predicate predicate = cb.like(root.get("labelname").as(String.class),"%"+label.getLabelname()+"%");
+                   list.add(predicate);
+               }
+                if(label.getState()!=null && "".equals(label.getState())){
+                    Predicate predicate = cb.equal(root.get("state").as(String.class),label.getState());
+                    list.add(predicate);
+                }
+                Predicate[] predicates = new Predicate[list.size()];
+                list.toArray(predicates);
+                return cb.and();
+            }
+        }, request);
+    }
 }
