@@ -59,6 +59,12 @@ public class EnterpriseController {
         return new Result(true,StatusCode.OK,"删除成功!");
     }
 
+    /**
+     * 修改
+     * @param enterpriseId
+     * @param enterprise
+     * @return
+     */
     @RequestMapping(value = "/{enterpriseId}",method = RequestMethod.PUT)
     public Result updata(@PathVariable("enterpriseId")String enterpriseId,@RequestBody Enterprise enterprise){
         enterprise.setId(enterpriseId);
