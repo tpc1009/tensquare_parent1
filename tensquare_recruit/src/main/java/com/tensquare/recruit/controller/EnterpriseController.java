@@ -54,8 +54,15 @@ public class EnterpriseController {
      * @return
      */
     @RequestMapping(value = "/{enterpriseId}",method = RequestMethod.DELETE)
-    public Result  delete(@PathVariable("enterpriseId")String enterpriseId){
+    public Result delete(@PathVariable("enterpriseId")String enterpriseId){
         this.enterpriseService.delete(enterpriseId);
         return new Result(true,StatusCode.OK,"删除成功!");
+    }
+
+    @RequestMapping(value = "/{enterpriseId}",method = RequestMethod.PUT)
+    public Result updata(@PathVariable("enterpriseId")String enterpriseId,@RequestBody Enterprise enterprise){
+        enterprise.setId(enterpriseId);
+        this.enterpriseService.update(enterprise);
+        return new Result(true,StatusCode.OK,"修改成功!");
     }
 }

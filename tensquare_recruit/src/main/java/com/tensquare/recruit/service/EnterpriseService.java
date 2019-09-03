@@ -38,4 +38,9 @@ public class EnterpriseService {
 
         enterpriseDao.deleteById(id);
     }
+
+    //根据id修改
+    public void update(Enterprise enterprise) {
+        enterpriseDao.save(enterprise);
+    }
 }
