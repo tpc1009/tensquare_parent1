@@ -3,6 +3,9 @@ package com.tensquare.recruit.service;
 import com.tensquare.recruit.dao.RecruitDao;
 import com.tensquare.recruit.pojo.Recruit;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import util.IdWorker;
@@ -68,4 +71,24 @@ public class RecruitService {
             }
         });
     }
+
+
+    public Page<Recruit> sqlSearchQuery(Recruit recruit, int page, int size) {
+        PageRequest Pageable = PageRequest.of(page - 1, size);
+        return this.recruitDao.findAll(new Specification<Recruit>() {
+            @Override
+            public Predicate toPredicate(Root<Recruit> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
+                ArrayList<Predicate> list = new ArrayList<>();
+
+                if(recruit.getJobname()!=null && !"".equals(recruit.getJobname())){
+                    Predicate predicate = cb.like(root.get("jobname").as(String.class),"%"+recruit.getJobname()+"%");
+                    list.add(predicate);
+                }
+                Predicate[] predicates = new Predicate[list.size()];
+                return cb.and(predicates);
+            }
+        },Pageable);
+    }
+
+
 }

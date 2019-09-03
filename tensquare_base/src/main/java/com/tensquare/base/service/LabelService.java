@@ -101,7 +101,7 @@ public class LabelService {
                 }
                 Predicate[] predicates = new Predicate[list.size()];
                 list.toArray(predicates);
-                return cb.and();
+                return cb.and(predicates);
             }
         }, request);
     }

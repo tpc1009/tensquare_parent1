@@ -7,6 +7,8 @@ import entity.StatusCode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @CrossOrigin
 @RequestMapping("/recruit")
@@ -79,8 +81,20 @@ public class RecruitController {
      */
     @RequestMapping(value = "/search",method = RequestMethod.POST)
     public Result search(@RequestBody Recruit  recruit){
+        List<Recruit> list = this.recruitService.sqlQuery(recruit);
+        return new Result(true, StatusCode.OK,"查询成功!",list);
+    }
+    /**
+     *
+     *
+     * 招聘分页
+     * @param recruit
+     * @return
+     */
+    @RequestMapping(value = "/search/{page}/{size}",method = RequestMethod.POST)
+    public Result searchQuery(@RequestBody Recruit  recruit,@PathVariable int page,@PathVariable int size){
 
-        return new Result(true, StatusCode.OK,"查询成功!",this.recruitService.sqlQuery(recruit));
+        return new Result(true, StatusCode.OK,"查询成功!",this.recruitService.sqlSearchQuery(recruit,page,size));
     }
 
 
