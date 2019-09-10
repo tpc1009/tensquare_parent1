@@ -6,7 +6,6 @@ import entity.PageResult;
 import entity.Result;
 import entity.StatusCode;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
 
@@ -63,5 +62,27 @@ public class ProblemController {
     public Result updata(@PathVariable("problemId")String problemId,@RequestBody Problem problem){
         this.problemService.update(problemId,problem);
         return new Result(true,StatusCode.OK,"修改成功!");
+    }
+
+    //根据id删除
+    @RequestMapping(value = "/problem/{problemId}",method = RequestMethod.DELETE)
+    public Result delete(@PathVariable("problemId")String problemId){
+        this.problemService.delete(problemId);
+        return new Result(true,StatusCode.OK,"删除成功!");
+    }
+
+    //search
+    @RequestMapping(value = "/search",method = RequestMethod.POST)
+    public Result search(@RequestBody Problem problem){
+
+        return new Result(true,StatusCode.OK,"查询成功!",this.problemService.search(problem));
+    }
+    //search
+    @RequestMapping(value = "/search/{page}/{size}",method = RequestMethod.POST)
+    public Result search(@RequestBody Problem problem,@PathVariable int page,@PathVariable int size){
+
+        Page<Problem> list = this.problemService.findSearch(problem,page,size);
+
+        return new Result(true,StatusCode.OK,"查询成功!",new PageResult<Problem>(list.getTotalElements(),list.getContent()));
     }
 }

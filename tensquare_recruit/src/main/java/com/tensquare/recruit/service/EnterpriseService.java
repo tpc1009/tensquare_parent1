@@ -7,9 +7,11 @@ import org.springframework.stereotype.Service;
 import util.IdWorker;
 
 
+import javax.transaction.Transactional;
 import java.util.List;
 
 @Service
+@Transactional
 public class EnterpriseService {
 
     @Autowired
