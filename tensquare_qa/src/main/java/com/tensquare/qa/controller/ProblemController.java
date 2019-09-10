@@ -57,4 +57,11 @@ public class ProblemController {
     public Result findById(@PathVariable("problemId")String problemId){
         return new Result(true,StatusCode.OK,"查询成功!",this.problemService.findById(problemId));
     }
+
+    //根据id修改问题
+    @RequestMapping(value = "/problem/{problemId}",method = RequestMethod.PUT)
+    public Result updata(@PathVariable("problemId")String problemId,@RequestBody Problem problem){
+        this.problemService.update(problemId,problem);
+        return new Result(true,StatusCode.OK,"修改成功!");
+    }
 }

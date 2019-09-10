@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import util.IdWorker;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class ProblemService {
@@ -52,5 +53,11 @@ public class ProblemService {
     //根据id查询
     public Problem findById(String problemId) {
         return this.problemDao.findById(problemId).get();
+    }
+
+    public void update(String problemId, Problem problem) {
+        problem.setId(problemId);
+        this.problemDao.save(problem);
+
     }
 }
