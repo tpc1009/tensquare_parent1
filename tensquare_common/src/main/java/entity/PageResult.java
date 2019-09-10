@@ -8,8 +8,8 @@ import java.util.List;
  */
 public class PageResult<T> {
 
-    private Long total;
-    private List<T> rows;
+    private Long total;//总记录数
+    private List<T> rows;//总条数(具体)
 
     public PageResult(Long total, List<T> rows) {
         this.total = total;

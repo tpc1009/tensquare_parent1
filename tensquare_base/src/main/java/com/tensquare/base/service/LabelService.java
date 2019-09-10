@@ -65,7 +65,7 @@ public class LabelService {
             public Predicate toPredicate(Root<Label> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
                 //封装集合
                 ArrayList<Predicate> list = new ArrayList<>();
-                if (label.getLabelname() !=null && "".equals(label.getLabelname())){
+                if (label.getLabelname() !=null && !"".equals(label.getLabelname())){
                     Predicate predicate = cb.like(root.get("labelname").as(String.class),"%"+label.getLabelname()+"%");//like语句
                     list.add(predicate);
                 }
