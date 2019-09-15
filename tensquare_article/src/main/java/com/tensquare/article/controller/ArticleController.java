@@ -1,5 +1,6 @@
 package com.tensquare.article.controller;
 
+import com.tensquare.article.pojo.Article;
 import com.tensquare.article.service.ArticleService;
 import entity.Result;
 import entity.StatusCode;
@@ -35,4 +36,27 @@ public class ArticleController {
 
         return new Result(true, StatusCode.OK,"查询成功!",this.articleService.findAll());
     }
+
+
+    //增加
+    @RequestMapping(value = "/article",method = RequestMethod.POST)
+    public Result add(@RequestBody Article article){
+
+        this.articleService.save(article);
+        return new Result(true,StatusCode.OK,"新增成功!");
+
+    }
+    //获取
+    @RequestMapping(value = "/article",method = RequestMethod.GET)
+    public Result getArticle(){
+        return new Result(true,StatusCode.OK,"查询成功!",this.articleService.findA());
+    }
+
+    //根据id查询
+    @RequestMapping(value = "/article/{articleId}",method = RequestMethod.GET)
+    public Result findById(@PathVariable String articleId){
+        return new Result(true,StatusCode.OK,"查询成功!",this.articleService.findById(articleId));
+    }
+
+
 }
