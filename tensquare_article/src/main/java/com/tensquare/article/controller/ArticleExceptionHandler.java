@@ -1,4 +1,4 @@
-package com.tensquare.base.controller;
+package com.tensquare.article.controller;
 
 import entity.Result;
 import entity.StatusCode;
@@ -7,8 +7,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 @ControllerAdvice
-public class BaseExceptionHandler {
-
+public class ArticleExceptionHandler {
 
     @ExceptionHandler(value = Exception.class)
     @ResponseBody
