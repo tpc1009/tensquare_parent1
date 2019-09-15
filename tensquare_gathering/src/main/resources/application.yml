@@ -6,7 +6,7 @@ spring:
     name: tensquare-article
   datasource:
     driverClassName: com.mysql.jdbc.Driver
-    url: jdbc:mysql://192.168.119.131:3306/tensquare_article?serverTimezone=UTC
+    url: jdbc:mysql://192.168.119.131:3306/tensquare_gathering?serverTimezone=UTC
     username: root
     password: 123456
     sql-script-encoding: utf-8

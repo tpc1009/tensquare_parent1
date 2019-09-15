@@ -30,16 +30,9 @@ public class ArticleController {
         return new Result(true, StatusCode.OK,"审核成功!");
     }
 
-    //查询
-    @RequestMapping(value = "/article",method = RequestMethod.GET)
-    public Result findAll(){
-
-        return new Result(true, StatusCode.OK,"查询成功!",this.articleService.findAll());
-    }
-
 
     //增加
-    @RequestMapping(value = "/article",method = RequestMethod.POST)
+    @RequestMapping(method = RequestMethod.POST)
     public Result add(@RequestBody Article article){
 
         this.articleService.save(article);
@@ -47,15 +40,25 @@ public class ArticleController {
 
     }
     //获取
-    @RequestMapping(value = "/article",method = RequestMethod.GET)
-    public Result getArticle(){
+    @RequestMapping(method = RequestMethod.GET)
+    public Result findAll(){
         return new Result(true,StatusCode.OK,"查询成功!",this.articleService.findA());
     }
 
+
+
     //根据id查询
-    @RequestMapping(value = "/article/{articleId}",method = RequestMethod.GET)
+    @RequestMapping(value = "/{articleId}",method = RequestMethod.GET)
     public Result findById(@PathVariable String articleId){
         return new Result(true,StatusCode.OK,"查询成功!",this.articleService.findById(articleId));
+    }
+
+
+    //根基id修改
+    @RequestMapping(value = "/{articleId}",method = RequestMethod.PUT)
+    public Result updataById(@RequestBody Article article){
+        this.articleService.updataById(article);
+        return new Result(true,StatusCode.OK,"修改成功!");
     }
 
 
