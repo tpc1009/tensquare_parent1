@@ -1,12 +1,14 @@
 package com.tensquare.gathering.pojo;
 
 import javax.persistence.Entity;
+import javax.persistence.Id;
 import javax.persistence.Table;
+import java.io.Serializable;
 import java.util.Date;
 
 @Entity
 @Table(name = "tb_gathering")
-public class Gathering {
+public class Gathering implements Serializable {
 
     /**
      *   `id` varchar(20) NOT NULL COMMENT '编号',
@@ -23,7 +25,9 @@ public class Gathering {
      *   `city` varchar(20) DEFAULT NULL COMMENT '城市',
      */
 
+    @Id
     private String id;
+
     private String name;
     private String summary;
     private String detail;
