@@ -5,6 +5,10 @@ import com.tensquare.spit.pojo.Spit;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Service;
 import util.IdWorker;
 
@@ -18,6 +22,9 @@ public class SpitService {
 
     @Autowired
     private IdWorker idWorker;
+
+    @Autowired
+    private MongoTemplate mongoTemplate;
 
     //保存
     public void save(Spit spit) {
@@ -52,4 +59,20 @@ public class SpitService {
         PageRequest pageable = PageRequest.of(page-1, size);
         return this.spitDao.findByParentid(parentid, pageable);
     }
+
+    //点赞(使用模板)
+    public void thumbup(String spitId) {
+        Query query = new Query();
+        query.addCriteria(Criteria.where("_id").is(spitId));
+        Update update = new Update();
+        update.inc("thumbup",1);
+        this.mongoTemplate.updateFirst(query,update,"spit");
+    }
+
+    //点赞原始方法
+    /*public void thumbup(String spitId) {
+        Spit spit = this.spitDao.findById(spitId).get();
+        spit.setThumbup((spit.getThumbup()==null ? 0:spit.getThumbup())+1);
+        this.spitDao.save(spit);
+    }*/
 }
