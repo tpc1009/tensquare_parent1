@@ -3,6 +3,8 @@ package com.tensquare.spit.service;
 import com.tensquare.spit.dao.SpitDao;
 import com.tensquare.spit.pojo.Spit;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import util.IdWorker;
 
@@ -42,5 +44,12 @@ public class SpitService {
     //根据id删除
     public void delete(String spitId) {
         this.spitDao.deleteById(spitId);
+    }
+
+    //根据父节点id查询
+    public Page<Spit> findByParentId(String parentid,int page,int size){
+
+        PageRequest pageable = PageRequest.of(page-1, size);
+        return this.spitDao.findByParentid(parentid, pageable);
     }
 }
