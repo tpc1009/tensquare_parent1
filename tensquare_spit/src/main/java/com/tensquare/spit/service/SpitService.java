@@ -12,6 +12,7 @@ import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Service;
 import util.IdWorker;
 
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -29,6 +30,21 @@ public class SpitService {
     //保存
     public void save(Spit spit) {
         spit.set_id(idWorker.nextId()+"");
+        spit.setPublishtime(new Date());//发布日期
+        spit.setVisits(0);//浏览量
+        spit.setShare(0);//分享数
+        spit.setThumbup(0);//点赞数
+        spit.setComment(0);//回复数
+        spit.setState("1");//状态
+        //如果父节点有值,则父节点加1
+        if(spit.getParentid() != null && !"".equals(spit.getParentid())){
+            Query query = new Query();
+            query.addCriteria(Criteria.where("_id").is(spit.getParentid()));
+            Update update = new Update();
+            update.inc("comment",1);
+            this.mongoTemplate.updateFirst(query,update,"spit");
+        }
+
         this.spitDao.save(spit);
     }
 

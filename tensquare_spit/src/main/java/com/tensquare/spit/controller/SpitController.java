@@ -7,6 +7,7 @@ import entity.Result;
 import entity.StatusCode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -16,6 +17,9 @@ public class SpitController {
 
     @Autowired
     private SpitService spitService;
+
+    @Autowired
+    private RedisTemplate redisTemplate;
 
 
     //add
@@ -61,7 +65,13 @@ public class SpitController {
     //根据id点赞
     @RequestMapping(value = "/thumbup/{spitId}",method = RequestMethod.PUT)
     public Result thumbup(@PathVariable String spitId){
+        //判断是否已点过
+        String userid ="123";
+        if(this.redisTemplate.opsForValue().get("thumbup_"+userid) !=null){
+            return new Result(false,StatusCode.REMOTEERROR,"不能重复点赞");
+        }
         this.spitService.thumbup(spitId);
+        this.redisTemplate.opsForValue().set("thumbup_"+userid,1);
         return new Result(true,StatusCode.OK,"点赞成功!");
     }
 
