@@ -3,29 +3,21 @@ package com.tensquare.search.pojo;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.elasticsearch.annotations.Document;
 import org.springframework.data.elasticsearch.annotations.Field;
+import org.springframework.data.elasticsearch.annotations.FieldType;
 
 import java.io.Serializable;
-
-@Document(indexName = "tensquare_atricle",type = "atricle")//需要索引/类型
+@Document(indexName = "tensquare_atricle",type = "atricle")
 public class Article implements Serializable {
 
     @Id
     private String id;
 
 
-    //是否索引-->该域是否被搜索
-    //是否分词-->整体匹配或者单词匹配
-    //是否存储-->是否显示在该页面上
+    @Field(index = true,type = FieldType.Text,analyzer = "ik_max_word",searchAnalyzer = "ik_max_word")
+    private String title;
 
-    @Field(index= true,analyzer="ik_max_word",searchAnalyzer="ik_max_word")
-    private String title;//标题
-
-    @Field(index = true,analyzer = "ik_max_word",searchAnalyzer = "ik_max_word")
+    @Field(index = true,type = FieldType.Text,analyzer = "ik_max_word",searchAnalyzer = "ik_max_word")
     private String content;
-
-    private String state;
-
-
 
 
     public String getId() {
@@ -50,13 +42,5 @@ public class Article implements Serializable {
 
     public void setContent(String content) {
         this.content = content;
-    }
-
-    public String getState() {
-        return state;
-    }
-
-    public void setState(String state) {
-        this.state = state;
     }
 }
