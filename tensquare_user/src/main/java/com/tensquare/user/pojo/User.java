@@ -1,6 +1,7 @@
 package com.tensquare.user.pojo;
 
 import javax.persistence.Entity;
+import javax.persistence.Id;
 import javax.persistence.Table;
 import java.io.Serializable;
 import java.util.Date;
@@ -28,7 +29,9 @@ public class User implements Serializable {
      *   `followcount` int(20) DEFAULT NULL COMMENT '关注数',
      */
 
+    @Id
     private String id;
+
     private String mobile;
     private String password;
     private String nickname;
@@ -37,6 +40,16 @@ public class User implements Serializable {
     private String avatar;
     private String email;
     private java.util.Date regdate;
+    private java.util.Date updatedate;
+
+    public Date getUpdatedate() {
+        return updatedate;
+    }
+
+    public void setUpdatedate(Date updatedate) {
+        this.updatedate = updatedate;
+    }
+
     private java.util.Date lastdate;
     private long online;
     private String interest;

@@ -3,7 +3,7 @@ server:
 
 spring:
   application:
-    name: tensquare-recruit
+    name: tensquare-qa
   datasource:
     driverClassName: com.mysql.jdbc.Driver
     url: jdbc:mysql://127.0.0.1:3306/tensquare_qa?serverTimezone=UTC

@@ -15,6 +15,21 @@ public class UserController {
     @Autowired
     private UserService userService;
 
+    //注册用户
+
+    @RequestMapping(value = "/register/{code}",method = RequestMethod.POST)
+    public Result register(@PathVariable String code,@RequestBody User user){
+        this.userService.register(code,user);
+        return new Result(true,StatusCode.OK,"注册成功!");
+    }
+
+    //发送短信消息
+    @RequestMapping(value = "/sendsms/{mobile}",method = RequestMethod.POST)
+    public Result sendSms(@PathVariable String mobile){
+        this.userService.sendSms(mobile);
+        return new Result(true,StatusCode.OK,"发送短信成功!");
+    }
+
     //新增
     @RequestMapping(method = RequestMethod.POST)
     public Result save(@RequestBody User user){
@@ -40,7 +55,7 @@ public class UserController {
         return new Result(true,StatusCode.OK,"查询成功!");
     }
     //根据id删除
-    @RequestMapping(value = "/{userId}",method = RequestMethod.PUT)
+    @RequestMapping(value = "/{userId}",method = RequestMethod.DELETE)
     public Result delete(@PathVariable String userId){
         this.userService.delete(userId);
         return new Result(true,StatusCode.OK,"删除成功!");
