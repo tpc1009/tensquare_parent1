@@ -6,6 +6,8 @@ import entity.Result;
 import entity.StatusCode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import util.IdWorker;
+import util.JwtUtil;
 
 @RestController
 @CrossOrigin
@@ -15,8 +17,27 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-    //注册用户
+    @Autowired
+    private IdWorker idWorker;
 
+    @Autowired
+    private JwtUtil jwtUtil;
+
+    //用户登陆
+    @RequestMapping(value = "/login",method = RequestMethod.POST)
+    public Result login(@RequestBody User user){
+        User userlogin = this.userService.login(user);
+        if(userlogin == null){
+            return new Result(false,StatusCode.LOGINERROR,"登陆失败!");
+        }
+        return new Result(true,StatusCode.OK,"登陆成功!");
+    }
+
+
+
+
+
+    //注册用户
     @RequestMapping(value = "/register/{code}",method = RequestMethod.POST)
     public Result register(@PathVariable String code,@RequestBody User user){
         this.userService.register(code,user);

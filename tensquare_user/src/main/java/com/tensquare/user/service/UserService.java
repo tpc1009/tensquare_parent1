@@ -2,13 +2,17 @@ package com.tensquare.user.service;
 
 import com.tensquare.user.dao.UserDao;
 import com.tensquare.user.pojo.User;
+import io.jsonwebtoken.Claims;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import util.IdWorker;
+import util.JwtUtil;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -29,6 +33,16 @@ public class UserService {
 
     @Autowired
     private IdWorker idWorker;
+
+    @Autowired
+    private JwtUtil jwtUtil;
+
+    //拿到请求头信息
+    @Autowired
+    private HttpServletRequest request;
+
+    @Autowired
+    private BCryptPasswordEncoder bCryptPasswordEncoder;
 
     //新增
     public void save(User user) {
@@ -54,6 +68,25 @@ public class UserService {
 
     //根据id删除
     public void delete(String userId) {
+        //判断权限是否是admin
+        String header = this.request.getHeader("Authorization");
+        if(header ==null || "".equals(header)){
+            throw new RuntimeException("权限不足");
+        }
+        if(!header.startsWith("Bearer ")){
+            throw new RuntimeException("权限不足");
+        }
+        String tocken = header.substring(7);
+
+        try {
+            Claims claims = this.jwtUtil.parseJWT(tocken);
+            String roles = (String)claims.get("roles");
+            if(roles == null || !"admin".equals(roles)){
+                throw new RuntimeException("权限不足");
+            }
+        }catch (Exception e){
+            throw new RuntimeException("权限不足");
+        }
         this.userDao.deleteById(userId);
     }
 
@@ -67,7 +100,7 @@ public class UserService {
         Map<String,String> map = new HashMap<>();
         map.put("mobile",mobile);
         map.put("checkCode",checkCode);
-        this.rabbitTemplate.convertAndSend("sms",map);
+        //this.rabbitTemplate.convertAndSend("sms",map);
 
         //控制台打印一份
         System.out.println("验证码为: "+checkCode);
@@ -85,6 +118,7 @@ public class UserService {
         }
 
         user.setId( idWorker.nextId()+"" );
+        user.setPassword(this.bCryptPasswordEncoder.encode(user.getPassword()));//加密
         user.setFollowcount(0);//关注数
         user.setFanscount(0);//粉丝数
         user.setOnline(0L);//在线时长
@@ -94,5 +128,14 @@ public class UserService {
 
         //保存
         this.userDao.save(user);
+    }
+
+    //登陆
+    public User login(User user) {
+        User u = this.userDao.findByMobile(user.getMobile());
+        if(u !=null && this.bCryptPasswordEncoder.matches(user.getPassword(),u.getPassword())){
+            return u;
+        }
+        return null;
     }
 }

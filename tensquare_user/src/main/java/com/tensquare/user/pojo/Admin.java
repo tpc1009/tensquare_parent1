@@ -19,6 +19,7 @@ public class Admin implements Serializable {
     private String id;
 
     private String loginname;
+    private String password;
     private String state;
 
     public String getId() {
@@ -27,6 +28,14 @@ public class Admin implements Serializable {
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public String getLoginname() {
