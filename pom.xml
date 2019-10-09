@@ -19,6 +19,7 @@
         <module>tensquare_search</module>
         <module>tensquare_user</module>
         <module>tensquare_sms</module>
+        <module>tensquare_eureka</module>
     </modules>
     <!-- Inherit defaults from Spring Boot -->
     <parent>
@@ -35,6 +36,14 @@
 
     <dependencyManagement>
         <dependencies>
+            <!--eureka-->
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-dependencies</artifactId>
+                <version>Greenwich.M1</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
             <dependency>
                 <!-- Import dependency management from Spring Boot -->
                 <groupId>org.springframework.boot</groupId>

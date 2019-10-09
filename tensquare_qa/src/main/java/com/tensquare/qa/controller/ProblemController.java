@@ -1,5 +1,6 @@
 package com.tensquare.qa.controller;
 
+import com.tensquare.qa.feign.LabelClient;
 import com.tensquare.qa.pojo.Problem;
 import com.tensquare.qa.service.ProblemService;
 import entity.PageResult;
@@ -16,6 +17,16 @@ public class ProblemController {
 
     @Autowired
     private ProblemService problemService;
+
+
+    @Autowired
+    private LabelClient labelClient;
+
+
+    @RequestMapping(value = "/label/{id}",method = RequestMethod.GET)
+    public Result labelfindById(@PathVariable("id")String id){
+        return this.labelClient.findById(id);
+    }
 
     //最新查询
     @RequestMapping(value = "/newlist/{labelid}/{page}/{size}",method = RequestMethod.GET)
