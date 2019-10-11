@@ -49,6 +49,13 @@ public class FriendController {
                }
             }else if(type.equals("2")){
                 //添加非好友
+                int flage = this.friendService.findNoFriend(userid,friendid);
+                if(flage == 0){
+                    return new Result(false,StatusCode.ERROR,"不能重复添加非好友");
+                }
+                if(flage == 1){
+                    return new Result(true,StatusCode.OK,"添加非好友成功");
+                }
             }
             return new Result(false,StatusCode.ERROR,"参数异常");
         }else {

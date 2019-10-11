@@ -1,7 +1,10 @@
 package com.tensquare.friend.service;
 
 import com.tensquare.friend.dao.FriendDao;
+import com.tensquare.friend.dao.NoFriendDao;
 import com.tensquare.friend.pojo.Friend;
+import com.tensquare.friend.pojo.NoFriend;
+import org.apache.tomcat.util.security.Escape;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,6 +16,9 @@ public class FriendService {
 
     @Autowired
     private FriendDao friendDao;
+
+    @Autowired
+    private NoFriendDao noFriendDao;
 
     //添加好友
     public int add(String userid, String friendid) {
@@ -34,6 +40,19 @@ public class FriendService {
             this.friendDao.upateIslike("1",userid,friendid);
             this.friendDao.upateIslike("1",friendid,userid);
         }
+        return 1;
+    }
+
+    //添加非好友
+    public int findNoFriend(String userid, String friendid) {
+        NoFriend noFriend = this.noFriendDao.findByUseridAndFriendid(userid,friendid);
+        if(noFriend !=null){
+            return 0;
+        }
+        noFriend = new NoFriend();
+        noFriend.setUserid(userid);
+        noFriend.setFriendid(friendid);
+        this.noFriendDao.save(noFriend);
         return 1;
     }
 }
